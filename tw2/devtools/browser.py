@@ -11,7 +11,12 @@ import inspect
 import pygments
 import subprocess
 import sys
-import xmlrpclib
+try:
+    # Python 3
+    from xmlrpc.client import ServerProxy
+except ImportError:
+    # Python 2
+    from xmlrpclib import ServerProxy
 
 import warnings
 from . import memoize
@@ -32,7 +37,7 @@ class WbPage(twc.Page):
         self.modules = sorted(ep.module_name
                         for ep in pr.iter_entry_points('tw2.widgets')
                         if not ep.module_name.endswith('.samples'))
-        self.pypi = xmlrpclib.ServerProxy('http://pypi.python.org/pypi')
+        self.pypi = ServerProxy('http://pypi.python.org/pypi')
 
     @memoize.memoize
     def _pypi_versions(self, module):
