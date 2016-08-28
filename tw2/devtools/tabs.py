@@ -5,7 +5,7 @@ import os
 import pygments.lexers
 import pygments.formatters
 import warnings
-import webhelpers.html
+import markupsafe
 
 import tw2.core as twc
 import tw2.core.templating as twt
@@ -135,7 +135,6 @@ def _make_tmpl(widget):
 
 funcs = [_make_demo, _make_docs, _make_params, _make_source, _make_tmpl]
 
-
 def make_tabs(widget):
     _items = [func(widget) for func in funcs]
     _items = filter(lambda item: item, _items)
@@ -147,4 +146,8 @@ def make_tabs(widget):
         id = widget.compound_id.replace(':', '-') + "-tabs"
         items = _items
 
-    return webhelpers.html.literal(Tabs.display())
+    tabs = Tabs.display()
+    if tabs is not None:
+        return markupsafe.Markup(tabs)
+    else:
+        return markupsafe.Markup(u"")

@@ -24,7 +24,7 @@ setup(
         'tw2.core>=2.1.0a',
         'gearbox',
         'weberror',
-        'webhelpers',
+        'markupsafe',
         'docutils',
         "tw2.jquery",
         "tw2.jqplugins.ui",
