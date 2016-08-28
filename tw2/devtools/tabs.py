@@ -30,17 +30,6 @@ def prepare_source(s):
 
 
 def prepare_template(s):
-    template_name = s.template
-
-    # Determine the engine name
-    if not s.inline_engine_name:
-        engine_name = twt.get_engine_name(template_name)
-    else:
-        engine_name = s.inline_engine_name
-
-    # Load the template source
-    source = twt.get_source(engine_name, template_name, s.inline_engine_name)
-
     lexer_lookup = dict(
         # Genshi
         genshi=pygments.lexers.GenshiLexer,
@@ -61,6 +50,26 @@ def prepare_template(s):
     )
 
     html_args = {'full': False}
+
+    template_name = s.template
+
+    if template_name is None:
+        # no template, try .generate_output()
+        return pygments.highlight(
+            s.generate_output(s.inline_engine_name),
+            pygments.lexers.HtmlLexer(),
+            pygments.formatters.HtmlFormatter(**html_args)
+        )
+
+    # Determine the engine name
+    if not s.inline_engine_name:
+        engine_name = twt.get_engine_name(template_name)
+    else:
+        engine_name = s.inline_engine_name
+
+    # Load the template source
+    source = twt.get_source(engine_name, template_name, s.inline_engine_name)
+
     return pygments.highlight(
         source,
         lexer_lookup[engine_name](),
