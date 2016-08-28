@@ -76,7 +76,7 @@ def rst2html(rst):
             'template': os.path.dirname(__file__) + '/rststub.txt'
         }
     )
-    html = html.replace('<blockquote>', '').replace('</blockquote>', '')
+    html = html.replace(b'<blockquote>', b'').replace(b'</blockquote>', b'')
     return gsi.HTML(html.decode('utf-8'))
 
 
